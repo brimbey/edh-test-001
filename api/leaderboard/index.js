@@ -31,15 +31,14 @@ const getSaltList = async () => {
   try {
     retData = cached.map((deck) => {
         return {
-            ...deck.data,
+            ...deck,
             id: deck.id,
-            salt: formatSalt(deck.data.salt),
         }
     });
 
-    retData = retData.sort((a, b) => {
-        return b?.salt - a?.salt;
-    });
+    // retData = retData.sort((a, b) => {
+    //     return b?.salt - a?.salt;
+    // });
   } catch (error) {
     console.log(`[ERROR] ${error}`);
     retData = [];
