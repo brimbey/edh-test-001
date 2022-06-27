@@ -31,8 +31,3 @@ data
 	dataID *String
 	salt **Number
 	ttl TTL
-
-@indexes
-data 
-	commanders **String
-	name byCommanders
