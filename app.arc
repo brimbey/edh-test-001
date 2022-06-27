@@ -30,5 +30,9 @@ data
 	scopeID *String
 	dataID *String
 	salt **Number
-	commanders
 	ttl TTL
+
+@indexes
+data 
+	commanders **String
+	name byCommanders
