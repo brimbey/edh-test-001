@@ -18,34 +18,86 @@ const formatSalt = (value) => {
 const getSaltList = async () => {
   let cached = {};
 
-  try {
-    cached = await data.get({
-      table: 'decks_v3',
-    });
-  } catch (error) {
-    cached = stubData;
-  }
 
-  let retData = [];
+  
+  let callback
+  // let promise
+  let listData = [];
+  // if (!callback) {
+  //   promise = new Promise(function (res, rej) {
+      // callback = function _errback (err, result) {
+      //   if (err) {
+      //     console.log(`[ERROR (callback)] ${err}`);
+      //   }
+        
+      //   console.log(`RESULT`);
+      //   prettyPrintJSON(result);
+      //   listData = result;
+      //   // err ? rej(err) : res(result)
+      // };
+  //   })
+  // }
 
-  try {
-    retData = cached.map((deck) => {
-        return {
-            ...deck,
-            id: deck.id,
-        }
-    });
 
-    // retData = retData.sort((a, b) => {
-    //     return b?.salt - a?.salt;
-    // });
-  } catch (error) {
-    console.log(`[ERROR] ${error}`);
-    retData = [];
-  }
+  await dynamo(async (err, doc) => {
+    console.log(`sdfsdfsdf`);
+    
+    if (err) {
+      console.log(`[ERROR] ${err}`);
+      return [];
+    }
+    // if (err) callback(err)
+    // else callback(null, `decks_v3`, doc)
+    console.log(`LDFKSLDKFD`);
+    // err ? rej(err) : res(result)
+    console.log(`DOC :: ${doc}`);
 
-  // default
-  return retData;
+    let { scopeID, dataID } = getKey({})
+    // dataID = dataID.replace('#UNKNOWN', '')
+    dataID = `staging#decks_v3`;
+    console.log(`[scopeID] ${scopeID}`);
+    console.log(`[dataID] ${dataID}`);
+
+
+    let query = {
+      TableName: `begin-app-staging-data`,
+      Limit: 10,
+      // KeyConditionExpression:  '#scopeID = :scopeID and #salt > :salt',//"#status = :status and #createdAt > :createdAt",
+      KeyConditionExpression: '#scopeID = :scopeID and begins_with(#dataID, :dataID)',
+      // FilterExpression: '#salt > :salt',
+      ExpressionAttributeNames: {
+        '#scopeID': 'scopeID',
+        '#dataID': 'dataID',
+        // '#salt': 'salt',
+      },
+      ExpressionAttributeValues: {
+        ':scopeID': scopeID,
+        ':dataID': dataID,
+        // ':salt': 90,
+      }
+    }
+    // if (params.cursor) {
+    //   query.ExclusiveStartKey = JSON.parse(Buffer.from(params.cursor, 'base64').toString('utf8'))
+    // }
+    var result = await doc.query(query).promise()
+    console.log(JSON.stringify(result))
+
+    // await doc.query(query, (err, result) => {
+    //   if (err) {
+    //     console.log(`[ERROR (callback)] ${err}`);
+    //   }
+      
+    //   console.log(`RESULT`);
+    //   prettyPrintJSON(result);
+    //   listData = result;
+    //   // err ? rej(err) : res(result)
+    // })
+  })
+
+  
+
+  console.log(`RETURNING`);
+  // return data;
 }
 
 exports.handler = async function http () {
