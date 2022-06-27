@@ -48,15 +48,17 @@ const getSaltList = async () => {
     }
     // if (err) callback(err)
     // else callback(null, `decks_v3`, doc)
-    console.log(`LDFKSLDKFD`);
     // err ? rej(err) : res(result)
-    console.log(`DOC :: ${doc}`);
+    console.log(`DOC :: `);
+    console.log(JSON.stringify(doc));
+    
 
     let { scopeID, dataID } = getKey({})
-    // dataID = dataID.replace('#UNKNOWN', '')
-    dataID = `staging#decks_v3`;
-    console.log(`[scopeID] ${scopeID}`);
+    dataID = dataID.replace('#UNKNOWN', '')
     console.log(`[dataID] ${dataID}`);
+    // dataID = `staging#decks_v3`;
+    console.log(`[scopeID] ${scopeID}`);
+    
 
 
     let query = {
