@@ -29,5 +29,11 @@ runtime nodejs16.x
 data 
 	scopeID *String
 	dataID *String
+	ttl TTL
+
+decks
+	scopeID *String
+	id *String
 	salt **Number
+	commanders
 	ttl TTL
